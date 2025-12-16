@@ -4,13 +4,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.ferreteriamapocho.data.Product
 import com.ferreteriamapocho.data.CartManager
 import kotlinx.coroutines.launch
@@ -18,215 +24,46 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatalogScreen(navController: NavHostController) {
+
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val products = listOf(
-        Product(
-            id = 1,
-            name = "Martillo Stanley 16 oz",
-            sku = "FER-001",
-            precio = 9990.0,
-            stock = 25,
-            imageUrl = "https://i.imgur.com/LmX8LUy.jpeg",
-            category = "Herramientas"
-        ),
-        Product(
-            id = 2,
-            name = "Taladro Black & Decker 12V",
-            sku = "FER-002",
-            precio = 45990.0,
-            stock = 15,
-            imageUrl = "https://i.imgur.com/BNq4dzv.jpeg",
-            category = "Electricidad"
-        ),
-        Product(
-            id = 3,
-            name = "Caja de clavos 2\" (500 unidades)",
-            sku = "FER-003",
-            precio = 3990.0,
-            stock = 50,
-            imageUrl = "https://i.imgur.com/ylxYqzE.jpeg",
-            category = "Construcción"
-        ),
-        Product(
-            id = 4,
-            name = "Cinta métrica 5m Truper",
-            sku = "FER-004",
-            precio = 2990.0,
-            stock = 30,
-            imageUrl = "https://i.imgur.com/QLUIZVD.jpeg",
-            category = "Medición"
-        ),
-        Product(
-            id = 5,
-            name = "Destornillador Philips Stanley",
-            sku = "FER-005",
-            precio = 2490.0,
-            stock = 40,
-            imageUrl = "https://i.imgur.com/3zVwbTI.jpeg",
-            category = "Herramientas"
-        ),
-
-        Product(
-            id = 6,
-            name = "Alicate Universal 8'' Truper",
-            sku = "FER-006",
-            precio = 5490.0,
-            stock = 22,
-            imageUrl = "https://i.imgur.com/TulD9mW.jpeg",
-            category = "Herramientas"
-        ),
-        Product(
-            id = 7,
-            name = "Serrucho Profesional 18'' Stanley",
-            sku = "FER-007",
-            precio = 7990.0,
-            stock = 18,
-            imageUrl = "https://i.imgur.com/HUXhZ0E.jpeg",
-            category = "Corte"
-        ),
-        Product(
-            id = 8,
-            name = "Llave Francesa 10'' Truper",
-            sku = "FER-008",
-            precio = 6990.0,
-            stock = 25,
-            imageUrl = "https://i.imgur.com/L0nFYe0.jpeg",
-            category = "Herramientas"
-        ),
-        Product(
-            id = 9,
-            name = "Pistola de Silicona 40W",
-            sku = "FER-009",
-            precio = 3990.0,
-            stock = 40,
-            imageUrl = "https://i.imgur.com/KG8YkY1.jpeg",
-            category = "Construcción"
-        ),
-        Product(
-            id = 10,
-            name = "Juego de Brocas para Metal (13 pcs)",
-            sku = "FER-010",
-            precio = 5990.0,
-            stock = 30,
-            imageUrl = "https://i.imgur.com/ZIpIyGo.jpeg",
-            category = "Electricidad"
-        ),
-
-        Product(
-            id = 11,
-            name = "Nivel de Burbuja 12'' Pretul",
-            sku = "FER-011",
-            precio = 3490.0,
-            stock = 20,
-            imageUrl = "https://i.imgur.com/7UuXkjg.jpeg",
-            category = "Medición"
-        ),
-        Product(
-            id = 12,
-            name = "Guantes de Seguridad Anticorte",
-            sku = "FER-012",
-            precio = 2990.0,
-            stock = 70,
-            imageUrl = "https://i.imgur.com/tv5qn4i.jpeg",
-            category = "Seguridad"
-        ),
-        Product(
-            id = 13,
-            name = "Linterna LED Recargable",
-            sku = "FER-013",
-            precio = 8990.0,
-            stock = 15,
-            imageUrl = "https://i.imgur.com/nLr7cWg.jpeg",
-            category = "Iluminación"
-        ),
-        Product(
-            id = 14,
-            name = "Juego de Destornilladores (6 piezas)",
-            sku = "FER-014",
-            precio = 4990.0,
-            stock = 50,
-            imageUrl = "https://i.imgur.com/MuQkGIQ.jpeg",
-            category = "Herramientas"
-        ),
-        Product(
-            id = 15,
-            name = "Candado de Acero 40mm",
-            sku = "FER-015",
-            precio = 2490.0,
-            stock = 60,
-            imageUrl = "https://i.imgur.com/WBcsDxX.jpeg",
-            category = "Seguridad"
-        ),
-
-        Product(
-            id = 16,
-            name = "Flexómetro 8m Stanley",
-            sku = "FER-016",
-            precio = 5990.0,
-            stock = 35,
-            imageUrl = "https://i.imgur.com/ylxYqzE.jpeg",
-            category = "Medición"
-        ),
-        Product(
-            id = 17,
-            name = "Mascarilla Respiratoria 3M",
-            sku = "FER-017",
-            precio = 3490.0,
-            stock = 80,
-            imageUrl = "https://i.imgur.com/HUXhZ0E.jpeg",
-            category = "Seguridad"
-        ),
-        Product(
-            id = 18,
-            name = "Llave Ajustable 12'' Truper",
-            sku = "FER-018",
-            precio = 8990.0,
-            stock = 10,
-            imageUrl = "https://i.imgur.com/BNq4dzv.jpeg",
-            category = "Herramientas"
-        ),
-        Product(
-            id = 19,
-            name = "Caja de Herramientas 19'' Pretul",
-            sku = "FER-019",
-            precio = 12990.0,
-            stock = 12,
-            imageUrl = "https://i.imgur.com/LmX8LUy.jpeg",
-            category = "Herramientas"
-        ),
-        Product(
-            id = 20,
-            name = "Cúter Profesional con 5 Hojas",
-            sku = "FER-020",
-            precio = 1990.0,
-            stock = 100,
-            imageUrl = "https://i.imgur.com/3zVwbTI.jpeg",
-            category = "Corte"
-        )
+        Product(1,"Martillo Stanley 16 oz","FER-001",9990.0,25,"https://firebasestorage.googleapis.com/v0/b/ferreteria-d3107.firebasestorage.app/o/products%2Fmartillo.png?alt=media&token=ba507dbc-51f1-41c0-8600-720e9eff7a78","Herramientas"),
+        Product(2,"Taladro Black & Decker 12V","FER-002",45990.0,15,"https://firebasestorage.googleapis.com/v0/b/ferreteria-d3107.firebasestorage.app/o/products%2Ftaladro.png?alt=media&token=3c8f91f7-9038-4c4e-a77f-78618a2bc98a","Electricidad"),
+        Product(3,"Caja de clavos 2\" (500 unidades)","FER-003",3990.0,50,"https://firebasestorage.googleapis.com/v0/b/ferreteria-d3107.firebasestorage.app/o/products%2Fclavos.png?alt=media&token=cd069b7b-7bc6-4e3c-84e6-c1bdfc2c8f39","Construcción"),
+        Product(4,"Cinta métrica 5m Truper","FER-004",2990.0,30,"https://firebasestorage.googleapis.com/v0/b/ferreteria-d3107.firebasestorage.app/o/products%2Fcinta%20metrica.png?alt=media&token=bf673c26-24db-4775-b875-21a5a01285c4","Medición"),
+        Product(5,"Destornillador Philips Stanley","FER-005",2490.0,40,"https://firebasestorage.googleapis.com/v0/b/ferreteria-d3107.firebasestorage.app/o/products%2Fdestornillador.png?alt=media&token=a4d52cc3-bb6b-462b-97c0-d21399217f9b","Herramientas"),
+        Product(6,"Alicate Universal 8'' Total","FER-006",5490.0,22,"https://firebasestorage.googleapis.com/v0/b/ferreteria-d3107.firebasestorage.app/o/products%2FAlicate%20universal.webp?alt=media&token=c02d0ada-c4bf-4d45-8ae0-ece0c851224d","Herramientas"),
+        Product(7,"Serrucho Profesional 18'' Stanley","FER-007",7990.0,18,"https://firebasestorage.googleapis.com/v0/b/ferreteria-d3107.firebasestorage.app/o/products%2FSerrucho.webp?alt=media&token=b8064619-74db-4719-aaa8-2abcf8e2243d","Corte"),
+        Product(8,"Llave Francesa 10'' Truper","FER-008",6990.0,25,"https://firebasestorage.googleapis.com/v0/b/ferreteria-d3107.firebasestorage.app/o/products%2Fllave%20francesa.png?alt=media&token=3b68d1db-717f-4bf9-be5b-f563c2049951","Herramientas"),
+        Product(9,"Pistola de Silicona 40W","FER-009",3990.0,40,"https://firebasestorage.googleapis.com/v0/b/ferreteria-d3107.firebasestorage.app/o/products%2Fpistola%20silicona.webp?alt=media&token=11b63429-3ecd-4b49-b41f-58ab10ea1671","Construcción"),
+        Product(10,"Juego de Brocas para Metal (13 pcs)","FER-010",5990.0,30,"https://firebasestorage.googleapis.com/v0/b/ferreteria-d3107.firebasestorage.app/o/products%2FJuegos%20de%20brocas.webp?alt=media&token=82f7c4a7-66a8-4e4e-972e-106b2ff6dcc6","Electricidad")
     )
-
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("Catálogo de productos", fontWeight = FontWeight.Bold) },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                title = {
+                    Text(
+                        text = "Catálogo de productos",
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             )
         }
-    ) { innerPadding ->
+    ) { padding ->
+
         LazyColumn(
             modifier = Modifier
-                .padding(innerPadding)
+                .padding(padding)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(products) { product ->
+
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -240,11 +77,28 @@ fun CatalogScreen(navController: NavHostController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
+
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data(product.imageUrl)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = product.name,
+                            modifier = Modifier
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(12.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+
+                        Spacer(Modifier.width(12.dp))
+
+
                         Column(Modifier.weight(1f)) {
                             Text(product.name, fontWeight = FontWeight.Bold)
                             Text("Precio: $${"%,.0f".format(product.precio)}")
                             Text("Stock: ${product.stock}")
                         }
+
 
                         Column(
                             horizontalAlignment = Alignment.End,
@@ -255,8 +109,7 @@ fun CatalogScreen(navController: NavHostController) {
                                     CartManager.addToCart(product)
                                     scope.launch {
                                         snackbarHostState.showSnackbar(
-                                            message = "${product.name} agregado al carrito",
-                                            withDismissAction = true
+                                            "${product.name} agregado al carrito"
                                         )
                                     }
                                 }
@@ -264,9 +117,11 @@ fun CatalogScreen(navController: NavHostController) {
                                 Text("Agregar")
                             }
 
-                            OutlinedButton(onClick = {
-                                navController.navigate("product/${product.id}")
-                            }) {
+                            OutlinedButton(
+                                onClick = {
+                                    navController.navigate("product/${product.id}")
+                                }
+                            ) {
                                 Text("Ver")
                             }
                         }

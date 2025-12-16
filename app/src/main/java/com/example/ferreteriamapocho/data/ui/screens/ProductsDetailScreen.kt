@@ -4,12 +4,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.ferreteriamapocho.data.Repo
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,7 +36,6 @@ fun ProductDetailScreen(productId: Int, navController: NavHostController) {
     ) { innerPadding ->
 
         if (product != null) {
-
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -44,6 +44,15 @@ fun ProductDetailScreen(productId: Int, navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+
+
+                AsyncImage(
+                    model = product.imageUrl,
+                    contentDescription = product.name,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                )
 
                 Text(
                     product.name,
@@ -58,9 +67,7 @@ fun ProductDetailScreen(productId: Int, navController: NavHostController) {
                 Spacer(Modifier.height(18.dp))
 
                 Button(
-                    onClick = {
-                        navController.navigate("checkout/${product.id}")
-                    },
+                    onClick = { navController.navigate("checkout/${product.id}") },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Comprar ahora")
@@ -76,7 +83,6 @@ fun ProductDetailScreen(productId: Int, navController: NavHostController) {
                     Text("Ver en el mapa")
                 }
             }
-
         } else {
             Box(
                 Modifier.fillMaxSize(),

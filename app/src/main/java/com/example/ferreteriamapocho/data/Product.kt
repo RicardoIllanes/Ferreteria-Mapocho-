@@ -6,6 +6,6 @@ data class Product(
     val sku: String,
     val precio: Double,
     var stock :Int,
-    val imageUrl: String,
+    val imageUrl: String = "",
     val category: String
 )

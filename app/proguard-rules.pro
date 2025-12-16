@@ -1,21 +1,37 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+########################################
+# Mantener info útil de crashes (recomendado)
+########################################
+-keepattributes *Annotation*
+-keepattributes Signature
+-keepattributes InnerClasses
+-keepattributes EnclosingMethod
+-keepattributes SourceFile,LineNumberTable
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+########################################
+# Firebase / Google Play Services (normalmente no requiere keep, pero ayuda)
+########################################
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**
+-dontwarn com.google.common.**
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+########################################
+# Room (recomendado para evitar problemas con anotaciones)
+########################################
+-keep class androidx.room.** { *; }
+-dontwarn androidx.room.**
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+########################################
+# Kotlin coroutines
+########################################
+-dontwarn kotlinx.coroutines.**
+
+########################################
+# Jetpack Compose / Navigation (normalmente OK, pero no molesta)
+########################################
+-dontwarn androidx.compose.**
+-dontwarn androidx.navigation.**
+
+########################################
+# Coil
+########################################
+-dontwarn coil.**
